@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net">
   <diagram name="Página-1" id="oi3VcHXNOx70WKb1kB9w">
-    <mxGraphModel dx="233" dy="196" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="404" dy="341" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -134,22 +134,22 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="IcpNaQqDW8l2l01Ex60I-36" parent="1" style="shape=table;startSize=30;container=1;collapsible=0;childLayout=tableLayout;fixedHeader=1;" value="SistemaControl" vertex="1">
-          <mxGeometry height="250" width="200" x="940" y="1120" as="geometry" />
+          <mxGeometry height="310" width="200" x="940" y="1120" as="geometry" />
         </mxCell>
         <mxCell id="IcpNaQqDW8l2l01Ex60I-37" parent="IcpNaQqDW8l2l01Ex60I-36" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fixedHeader=1;" value="" vertex="1">
-          <mxGeometry height="104" width="200" y="30" as="geometry" />
+          <mxGeometry height="132" width="200" y="30" as="geometry" />
         </mxCell>
         <mxCell id="IcpNaQqDW8l2l01Ex60I-38" parent="IcpNaQqDW8l2l01Ex60I-37" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;" value="&lt;div&gt;+agregarItems(item: Item)&lt;/div&gt;&lt;div&gt;+agregarPersona(per: Persona)&lt;/div&gt;&lt;div&gt;+finalizarPrestamo(pre: Prestamo)&lt;/div&gt;&lt;div&gt;+retornarItem(item: Item)&lt;/div&gt;&lt;div&gt;+verifcarAlertas()&lt;/div&gt;&lt;div&gt;+guardarDatos()&lt;/div&gt;" vertex="1">
-          <mxGeometry height="104" width="200" as="geometry">
-            <mxRectangle height="104" width="200" as="alternateBounds" />
+          <mxGeometry height="132" width="200" as="geometry">
+            <mxRectangle height="132" width="200" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
         <mxCell id="IcpNaQqDW8l2l01Ex60I-39" parent="IcpNaQqDW8l2l01Ex60I-36" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fixedHeader=1;" value="" vertex="1">
-          <mxGeometry height="116" width="200" y="134" as="geometry" />
+          <mxGeometry height="148" width="200" y="162" as="geometry" />
         </mxCell>
-        <mxCell id="IcpNaQqDW8l2l01Ex60I-40" parent="IcpNaQqDW8l2l01Ex60I-39" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;" value="&lt;div&gt;+ obtenerListadoItems(): List&lt;/div&gt;&lt;div&gt;+ obtenerListadoPersonas(): List&lt;/div&gt;&lt;div&gt;+ obtenerListadoPrestamos(): List&lt;/div&gt;&lt;div&gt;+ obtenerListadoTipos(): List&lt;/div&gt;&lt;div&gt;+ obtenerListadoCategorias(): List&lt;/div&gt;" vertex="1">
-          <mxGeometry height="116" width="200" as="geometry">
-            <mxRectangle height="116" width="200" as="alternateBounds" />
+        <mxCell id="IcpNaQqDW8l2l01Ex60I-40" parent="IcpNaQqDW8l2l01Ex60I-39" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;" value="&lt;div&gt;+ obtenerListadoItems(): List&lt;/div&gt;&lt;div&gt;+ obtenerListadoPersonas(): List&lt;/div&gt;&lt;div&gt;+ obtenerListadoPrestamos(): List&lt;/div&gt;&lt;div&gt;+ obtenerListadoTipos(): List&lt;/div&gt;&lt;div&gt;+ obtenerListadoCategorias(): List&lt;/div&gt;&lt;div&gt;&lt;div&gt;+ reportePorUsuario(): String&lt;/div&gt;&lt;div&gt;+ reportePorItem(): String&lt;/div&gt;&lt;div&gt;+ reportePorCategoria(): String&lt;/div&gt;&lt;div&gt;+ reportePorTipo(): String&lt;/div&gt;&lt;div&gt;+ mostrar():&amp;nbsp;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="148" width="200" as="geometry">
+            <mxRectangle height="148" width="200" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
         <mxCell id="IcpNaQqDW8l2l01Ex60I-41" parent="1" style="shape=table;startSize=30;container=1;collapsible=0;childLayout=tableLayout;fixedHeader=1;" value="Reporte" vertex="1">
