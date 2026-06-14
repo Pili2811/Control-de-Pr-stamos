@@ -10,15 +10,16 @@ public class Item implements Serializable {
 	private Tipo tipo;
 	private List<Categoria> categorias;
 	private boolean prestado;
+	private Prestamo prestamo;
 	public Item(String nombre, String descripcion, Tipo tipo) {
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.tipo = tipo;
 		this.categorias = new ArrayList<Categoria>();
 		this.prestado = false;
-		if (tipo != null) {
+		this.prestamo = null;
+		if (tipo != null)
 			tipo.agregarItem(this);
-		}
 	}
 	public String getNombre() {
 		return nombre;
@@ -36,13 +37,11 @@ public class Item implements Serializable {
 		return tipo;
 	}
 	public void setTipo(Tipo nuevoTipo) {
-		if (this.tipo != null) {
+		if (this.tipo != null)
 			this.tipo.quitarItem(this);
-		}
 		this.tipo = nuevoTipo;
-		if (nuevoTipo != null) {
+		if (nuevoTipo != null)
 			nuevoTipo.agregarItem(this);
-		}
 	}
 	public List<Categoria> getCategorias() {
 		return categorias;
@@ -52,6 +51,12 @@ public class Item implements Serializable {
 	}
 	public void setPrestado(boolean prestado) {
 		this.prestado = prestado;
+	}
+	public Prestamo getPrestamo() {
+		return prestamo;
+	}
+	public void setPrestamo(Prestamo prestamo) {
+		this.prestamo = prestamo;
 	}
 	public void agregarCategoria(Categoria categoria) {
 		if (!categorias.contains(categoria)) {
@@ -64,13 +69,11 @@ public class Item implements Serializable {
 		categoria.quitarItem(this);
 	}
 	public void desvincular() {
-		for (Categoria c : new ArrayList<Categoria>(categorias)) {
+		for (Categoria c : new ArrayList<Categoria>(categorias))
 			c.quitarItem(this);
-		}
 		categorias.clear();
-		if (tipo != null) {
+		if (tipo != null)
 			tipo.quitarItem(this);
-		}
 	}
 	public String toString() {
 		return nombre;

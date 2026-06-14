@@ -40,20 +40,21 @@ public class Prestamo implements Serializable {
 		if (!items.contains(item)) {
 			items.add(item);
 			item.setPrestado(true);
+			item.setPrestamo(this);
 		}
 	}
 	public void quitarItem(Item item) {
 		items.remove(item);
 		item.setPrestado(false);
+		item.setPrestamo(null);
 	}
 	public void agregarAlerta(Alerta alerta) {
 		this.alerta = alerta;
 	}
 	public List<Alerta> alerta() {
 		List<Alerta> lista = new ArrayList<Alerta>();
-		if (alerta != null) {
+		if (alerta != null)
 			lista.add(alerta);
-		}
 		return lista;
 	}
 	public boolean tieneAlerta() {
@@ -62,11 +63,11 @@ public class Prestamo implements Serializable {
 	public void finalizar() {
 		for (Item item : new ArrayList<Item>(items)) {
 			item.setPrestado(false);
+			item.setPrestamo(null);
 		}
 		items.clear();
-		if (alerta != null) {
+		if (alerta != null)
 			alerta.eliminar();
-		}
 		alerta = null;
 	}
 	public String toString() {

@@ -42,7 +42,7 @@ public class SistemaControl implements Serializable {
 		return instance;
 	}
 
-	// ===================== VERIFICACIONES =====================
+	// VERIFICACIONES 
 
 	private void verificarItemExistente(String nombre) throws Exception {
 		if (buscarItem(nombre) == null)
@@ -77,7 +77,7 @@ public class SistemaControl implements Serializable {
 			throw new Exception("Prestamo no encontrado.");
 	}
 
-	// ===================== ITEMS =====================
+	//  ITEMS
 
 	public Item buscarItem(String nombre) {
 		if (nombre == null)
@@ -136,7 +136,7 @@ public class SistemaControl implements Serializable {
 		guardarDatos();
 	}
 
-	// ===================== PERSONAS =====================
+	//  PERSONAS 
 
 	public Persona buscarPersona(String id) {
 		if (id == null)
@@ -186,7 +186,7 @@ public class SistemaControl implements Serializable {
 		guardarDatos();
 	}
 
-	// ===================== CATEGORIAS =====================
+	//  CATEGORIAS 
 
 	public Categoria buscarCategoria(String nombre) {
 		if (nombre == null)
@@ -225,7 +225,7 @@ public class SistemaControl implements Serializable {
 		guardarDatos();
 	}
 
-	// ===================== TIPOS =====================
+	//  TIPOS 
 
 	public Tipo buscarTipo(String nombre) {
 		if (nombre == null)
@@ -274,7 +274,7 @@ public class SistemaControl implements Serializable {
 		guardarDatos();
 	}
 
-	// ===================== PRESTAMOS =====================
+	//  PRESTAMOS 
 
 	public Prestamo buscarPrestamo(String codigo) {
 		if (codigo == null)
@@ -342,11 +342,11 @@ public class SistemaControl implements Serializable {
 	}
 	public void agregarAlertaPrestamo(String prestamoCod, String mensaje, boolean recurrente, int dias) throws Exception {
 		Prestamo prestamo = obtenerPrestamo(prestamoCod);
-		prestamo.agregarAlerta(new Alerta(mensaje, recurrente, dias));
+		prestamo.agregarAlerta(new Alerta(mensaje, recurrente, dias, prestamo));
 		guardarDatos();
 	}
 
-	// ===================== REPORTES =====================
+	//  REPORTES 
 
 	public String reporteUsuario(String personaId) throws Exception {
 		Persona persona = obtenerPersona(personaId);
@@ -431,7 +431,7 @@ public class SistemaControl implements Serializable {
 		return sb.toString();
 	}
 
-	// ===================== ALERTAS =====================
+	//  ALERTAS 
 
 	public List<String> verificarAlertas() {
 		List<String> mensajes = new ArrayList<String>();
@@ -449,7 +449,7 @@ public class SistemaControl implements Serializable {
 		return mensajes;
 	}
 
-	// ===================== PERSISTENCIA =====================
+	//  PERSISTENCIA 
 
 	public void guardarDatos() {
 		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ARCHIVO_DATOS))) {
