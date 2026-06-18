@@ -247,7 +247,7 @@ public class Principal {
 		btnFinalizarPrestamo.setBounds(680, 60, 150, 30);
 		panelPrestamos.add(btnFinalizarPrestamo);
 
-		btnReportePrestamo = new JButton("Ver reporte");
+		btnReportePrestamo = new JButton("Ver préstamos");
 		btnReportePrestamo.setBounds(680, 100, 150, 30);
 		panelPrestamos.add(btnReportePrestamo);
 
@@ -259,7 +259,7 @@ public class Principal {
 
 		btnFinalizarPrestamo.addActionListener(e -> finalizarPrestamo());
 
-		btnReportePrestamo.addActionListener(e -> verReportePrestamo());
+		btnReportePrestamo.addActionListener(e -> verPrestamosPersona());
 		panelPrestamos.addComponentListener(new ComponentAdapter() {
 			public void componentShown(ComponentEvent e) {
 				cargarPrestamos();
@@ -520,6 +520,28 @@ public class Principal {
 				);
 			}
 		}
+	}
+	
+	private void verPrestamosPersona() {
+		int fila = tablaPrestamos.getSelectedRow();
+
+		if (fila == -1) {
+			JOptionPane.showMessageDialog(
+				frame,
+				"Debe seleccionar una persona.",
+				"Error",
+				JOptionPane.ERROR_MESSAGE
+			);
+			return;
+		}
+
+		String nombrePersona = (String) tablaPrestamos.getValueAt(fila, 0);
+
+		DetallePrestamosPersona dialog = new DetallePrestamosPersona(frame, nombrePersona);
+		dialog.setVisible(true);
+
+		cargarPrestamos();
+		cargarItems();
 	}
 
 	private void verReportePrestamo() {
