@@ -6,61 +6,119 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.JComboBox;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.DefaultListModel;
 
 import control.SistemaControl;
 import logica.Item;
+import logica.Tipo;
+import logica.Categoria;
 
 public class EditarItem extends JDialog {
 
 	private JTextField txtNombre;
 	private JTextField txtDescripcion;
+	private JComboBox<Tipo> comboTipo;
+	private JList<Categoria> listaCategorias;
+	private DefaultListModel<Categoria> modeloCategorias;
+
 	private String nombreActual;
 
 	public EditarItem(JFrame parent, String nombreItem) {
 		this.nombreActual = nombreItem;
 
 		setTitle("Editar Item");
-		setBounds(100, 100, 300, 200);
+		setBounds(100, 100, 420, 330);
 		setModal(true);
 		setLocationRelativeTo(parent);
 		getContentPane().setLayout(null);
 
 		JLabel lblNombre = new JLabel("Nombre:");
-		lblNombre.setBounds(10, 20, 80, 14);
+		lblNombre.setBounds(10, 20, 90, 14);
 		getContentPane().add(lblNombre);
 
 		txtNombre = new JTextField();
-		txtNombre.setBounds(100, 17, 150, 20);
+		txtNombre.setBounds(110, 17, 250, 20);
 		getContentPane().add(txtNombre);
 
 		JLabel lblDescripcion = new JLabel("Descripción:");
-		lblDescripcion.setBounds(10, 50, 90, 14);
+		lblDescripcion.setBounds(10, 55, 90, 14);
 		getContentPane().add(lblDescripcion);
 
 		txtDescripcion = new JTextField();
-		txtDescripcion.setBounds(100, 47, 150, 20);
+		txtDescripcion.setBounds(110, 52, 250, 20);
 		getContentPane().add(txtDescripcion);
 
+		JLabel lblTipo = new JLabel("Tipo:");
+		lblTipo.setBounds(10, 90, 90, 14);
+		getContentPane().add(lblTipo);
+
+		comboTipo = new JComboBox<Tipo>();
+		comboTipo.setBounds(110, 86, 250, 22);
+		getContentPane().add(comboTipo);
+
+		JLabel lblCategorias = new JLabel("Categorías:");
+		lblCategorias.setBounds(10, 125, 90, 14);
+		getContentPane().add(lblCategorias);
+
+		modeloCategorias = new DefaultListModel<Categoria>();
+		listaCategorias = new JList<Categoria>(modeloCategorias);
+		listaCategorias.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
+		JScrollPane scrollCategorias = new JScrollPane(listaCategorias);
+		scrollCategorias.setBounds(110, 125, 250, 90);
+		getContentPane().add(scrollCategorias);
+
 		JButton btnGuardar = new JButton("Guardar");
-		btnGuardar.setBounds(40, 100, 90, 23);
+		btnGuardar.setBounds(80, 240, 100, 23);
 		getContentPane().add(btnGuardar);
 
 		JButton btnCancelar = new JButton("Cancelar");
-		btnCancelar.setBounds(150, 100, 90, 23);
+		btnCancelar.setBounds(200, 240, 100, 23);
 		getContentPane().add(btnCancelar);
 
 		btnGuardar.addActionListener(e -> guardarCambios());
 		btnCancelar.addActionListener(e -> dispose());
 
-		cargarDatosItem();
+		cargarDatos();
 	}
 
-	private void cargarDatosItem() {
+	private void cargarDatos() {
 		try {
-			Item item = SistemaControl.getInstance().obtenerItem(nombreActual);
+			SistemaControl control = SistemaControl.getInstance();
+
+			Item item = control.obtenerItem(nombreActual);
 
 			txtNombre.setText(item.getNombre());
 			txtDescripcion.setText(item.getDescripcion());
+
+			comboTipo.removeAllItems();
+			modeloCategorias.clear();
+
+			for (Tipo t : control.obtenerListadoTipos()) {
+				comboTipo.addItem(t);
+
+				if (item.getTipo() != null && t.getNombre().equalsIgnoreCase(item.getTipo().getNombre())) {
+					comboTipo.setSelectedItem(t);
+				}
+			}
+
+			for (Categoria c : control.obtenerListadoCategorias()) {
+				modeloCategorias.addElement(c);
+			}
+
+			for (int i = 0; i < modeloCategorias.size(); i++) {
+				Categoria categoriaLista = modeloCategorias.getElementAt(i);
+
+				for (Categoria categoriaItem : item.getCategorias()) {
+					if (categoriaLista.getNombre().equalsIgnoreCase(categoriaItem.getNombre())) {
+						listaCategorias.addSelectionInterval(i, i);
+					}
+				}
+			}
 
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(
@@ -76,6 +134,7 @@ public class EditarItem extends JDialog {
 	private void guardarCambios() {
 		String nuevoNombre = txtNombre.getText();
 		String descripcion = txtDescripcion.getText();
+		Tipo tipo = (Tipo) comboTipo.getSelectedItem();
 
 		if (nuevoNombre == null || nuevoNombre.isBlank()) {
 			JOptionPane.showMessageDialog(
@@ -87,8 +146,31 @@ public class EditarItem extends JDialog {
 			return;
 		}
 
+		if (tipo == null) {
+			JOptionPane.showMessageDialog(
+				this,
+				"Debe seleccionar un tipo.",
+				"Error",
+				JOptionPane.ERROR_MESSAGE
+			);
+			return;
+		}
+
 		try {
-			SistemaControl.getInstance().modificarItem(nombreActual, nuevoNombre, descripcion);
+			SistemaControl control = SistemaControl.getInstance();
+
+			Item item = control.obtenerItem(nombreActual);
+
+			for (Categoria c : item.getCategorias()) {
+				control.quitarCategoriaDeItem(nombreActual, c.getNombre());
+			}
+
+			control.modificarItem(nombreActual, nuevoNombre, descripcion);
+			control.asignarTipoItem(nuevoNombre, tipo.getNombre());
+
+			for (Categoria c : listaCategorias.getSelectedValuesList()) {
+				control.agregarCategoriaAItem(nuevoNombre, c.getNombre());
+			}
 
 			JOptionPane.showMessageDialog(
 				this,
