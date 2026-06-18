@@ -26,37 +26,37 @@ public class AgregarItem extends JDialog {
 
 	public AgregarItem(JFrame parent) {
 		setTitle("Agregar Item");
-		setBounds(100, 100, 420, 330);
+		setBounds(100, 100, 460, 380);
 		setModal(true);
 		setLocationRelativeTo(parent);
 		getContentPane().setLayout(null);
 
 		JLabel lblNombre = new JLabel("Nombre:");
-		lblNombre.setBounds(10, 20, 90, 14);
+		lblNombre.setBounds(20, 20, 100, 20);
 		getContentPane().add(lblNombre);
 
 		txtNombre = new JTextField();
-		txtNombre.setBounds(110, 17, 250, 20);
+		txtNombre.setBounds(130, 20, 260, 22);
 		getContentPane().add(txtNombre);
 
 		JLabel lblDescripcion = new JLabel("Descripción:");
-		lblDescripcion.setBounds(10, 55, 90, 14);
+		lblDescripcion.setBounds(20, 60, 100, 20);
 		getContentPane().add(lblDescripcion);
 
 		txtDescripcion = new JTextField();
-		txtDescripcion.setBounds(110, 52, 250, 20);
+		txtDescripcion.setBounds(130, 60, 260, 22);
 		getContentPane().add(txtDescripcion);
 
 		JLabel lblTipo = new JLabel("Tipo:");
-		lblTipo.setBounds(10, 90, 90, 14);
+		lblTipo.setBounds(20, 100, 100, 20);
 		getContentPane().add(lblTipo);
 
 		comboTipo = new JComboBox<Tipo>();
-		comboTipo.setBounds(110, 86, 250, 22);
+		comboTipo.setBounds(130, 100, 260, 22);
 		getContentPane().add(comboTipo);
 
 		JLabel lblCategorias = new JLabel("Categorías:");
-		lblCategorias.setBounds(10, 125, 90, 14);
+		lblCategorias.setBounds(20, 140, 100, 20);
 		getContentPane().add(lblCategorias);
 
 		modeloCategorias = new DefaultListModel<Categoria>();
@@ -64,15 +64,15 @@ public class AgregarItem extends JDialog {
 		listaCategorias.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		JScrollPane scrollCategorias = new JScrollPane(listaCategorias);
-		scrollCategorias.setBounds(110, 125, 250, 90);
+		scrollCategorias.setBounds(130, 140, 260, 110);
 		getContentPane().add(scrollCategorias);
 
 		JButton btnGuardar = new JButton("Guardar");
-		btnGuardar.setBounds(80, 240, 100, 23);
+		btnGuardar.setBounds(100, 285, 100, 25);
 		getContentPane().add(btnGuardar);
 
 		JButton btnCancelar = new JButton("Cancelar");
-		btnCancelar.setBounds(200, 240, 100, 23);
+		btnCancelar.setBounds(220, 285, 100, 25);
 		getContentPane().add(btnCancelar);
 
 		btnGuardar.addActionListener(e -> guardarItem());

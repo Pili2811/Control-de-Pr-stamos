@@ -34,6 +34,9 @@ public class Principal {
 	private JButton btnAgregarItem;
 	private JButton btnEditarItem;
 	private JButton btnBorrarItem;
+	private javax.swing.JTextField txtBuscarItem;
+	private JButton btnBuscarItem;
+	private JButton btnMostrarItems;
 	
 	// PERSONAS
 	private JTable tablaPersonas;
@@ -42,6 +45,9 @@ public class Principal {
 	private JButton btnAgregarPersona;
 	private JButton btnEditarPersona;
 	private JButton btnBorrarPersona;
+	private javax.swing.JTextField txtBuscarPersona;
+	private JButton btnBuscarPersona;
+	private JButton btnMostrarPersonas;
 	
 	// CATEGORÍAS
 	private JTable tablaCategorias;
@@ -50,6 +56,9 @@ public class Principal {
 	private JButton btnAgregarCategoria;
 	private JButton btnEditarCategoria;
 	private JButton btnBorrarCategoria;
+	private javax.swing.JTextField txtBuscarCategoria;
+	private JButton btnBuscarCategoria;
+	private JButton btnMostrarCategorias;
 	
 	// TIPOS
 	private JTable tablaTipos;
@@ -58,6 +67,9 @@ public class Principal {
 	private JButton btnAgregarTipo;
 	private JButton btnEditarTipo;
 	private JButton btnBorrarTipo;
+	private javax.swing.JTextField txtBuscarTipo;
+	private JButton btnBuscarTipo;
+	private JButton btnMostrarTipos;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -80,6 +92,9 @@ public class Principal {
 	private JButton btnHacerPrestamo;
 	private JButton btnFinalizarPrestamo;
 	private JButton btnReportePrestamo;
+	private javax.swing.JTextField txtBuscarPrestamo;
+	private JButton btnBuscarPrestamo;
+	private JButton btnMostrarPrestamos;
 
 	public Principal() {
 		initialize();
@@ -133,10 +148,10 @@ public class Principal {
 		tablaItems = new JTable();
 		tablaItems.setModel(new javax.swing.table.DefaultTableModel(
 			new Object[][] {},
-			new String[] { "Nombre", "Descripción", "Tipo", "Prestado" }
+			new String[] { "Nombre", "Descripción", "Tipo", "Categorías", "Prestado" }
 		) {
 			Class[] columnTypes = new Class[] {
-				String.class, String.class, String.class, String.class
+				String.class, String.class, String.class, String.class, String.class
 			};
 
 			public Class getColumnClass(int columnIndex) {
@@ -166,6 +181,43 @@ public class Principal {
 		panelItems.add(btnBorrarItem);
 
 		btnBorrarItem.addActionListener(e -> borrarItem());
+		txtBuscarItem = new javax.swing.JTextField();
+		txtBuscarItem.setBounds(680, 150, 150, 25);
+		panelItems.add(txtBuscarItem);
+
+		btnBuscarItem = new JButton("Buscar");
+		btnBuscarItem.setBounds(680, 185, 150, 30);
+		panelItems.add(btnBuscarItem);
+
+		btnMostrarItems = new JButton("Mostrar todos");
+		btnMostrarItems.setBounds(680, 225, 150, 30);
+		panelItems.add(btnMostrarItems);
+
+		btnBuscarItem.addActionListener(e -> buscarItem());
+
+		btnMostrarItems.addActionListener(e -> {
+			txtBuscarItem.setText("");
+			cargarItems();
+		});
+		txtBuscarItem = new javax.swing.JTextField();
+		txtBuscarItem.setBounds(680, 150, 150, 25);
+		panelItems.add(txtBuscarItem);
+
+		btnBuscarItem = new JButton("Buscar");
+		btnBuscarItem.setBounds(680, 185, 150, 30);
+		panelItems.add(btnBuscarItem);
+
+		btnMostrarItems = new JButton("Mostrar todos");
+		btnMostrarItems.setBounds(680, 225, 150, 30);
+		panelItems.add(btnMostrarItems);
+
+		btnBuscarItem.addActionListener(e -> buscarItem());
+
+		btnMostrarItems.addActionListener(e -> {
+			txtBuscarItem.setText("");
+			cargarItems();
+		});
+		
 
 		// ==================== PERSONAS ====================
 		panelPersonas = new JPanel();
@@ -177,10 +229,10 @@ public class Principal {
 		tablaPersonas = new JTable();
 		tablaPersonas.setModel(new javax.swing.table.DefaultTableModel(
 			new Object[][] {},
-			new String[] { "ID", "Nombre", "Teléfono", "Correo" }
+			new String[] { "Nombre", "Teléfono", "Correo" }
 		) {
 			Class[] columnTypes = new Class[] {
-				String.class, String.class, String.class, String.class
+			 String.class, String.class, String.class
 			};
 
 			public Class getColumnClass(int columnIndex) {
@@ -216,6 +268,24 @@ public class Principal {
 			}
 		});
 		tabbedPane.addTab("Personas", null, panelPersonas, null);
+		txtBuscarPersona = new javax.swing.JTextField();
+		txtBuscarPersona.setBounds(680, 150, 150, 25);
+		panelPersonas.add(txtBuscarPersona);
+
+		btnBuscarPersona = new JButton("Buscar");
+		btnBuscarPersona.setBounds(680, 185, 150, 30);
+		panelPersonas.add(btnBuscarPersona);
+
+		btnMostrarPersonas = new JButton("Mostrar todos");
+		btnMostrarPersonas.setBounds(680, 225, 150, 30);
+		panelPersonas.add(btnMostrarPersonas);
+
+		btnBuscarPersona.addActionListener(e -> buscarPersona());
+
+		btnMostrarPersonas.addActionListener(e -> {
+			txtBuscarPersona.setText("");
+			cargarPersonas();
+		});
 
 		// ==================== PRÉSTAMOS ====================
 		panelPrestamos = new JPanel();
@@ -266,6 +336,24 @@ public class Principal {
 			}
 		});
 		tabbedPane.addTab("Préstamos", null, panelPrestamos, null);
+		txtBuscarPrestamo = new javax.swing.JTextField();
+		txtBuscarPrestamo.setBounds(680, 150, 150, 25);
+		panelPrestamos.add(txtBuscarPrestamo);
+
+		btnBuscarPrestamo = new JButton("Buscar");
+		btnBuscarPrestamo.setBounds(680, 185, 150, 30);
+		panelPrestamos.add(btnBuscarPrestamo);
+
+		btnMostrarPrestamos = new JButton("Mostrar todos");
+		btnMostrarPrestamos.setBounds(680, 225, 150, 30);
+		panelPrestamos.add(btnMostrarPrestamos);
+
+		btnBuscarPrestamo.addActionListener(e -> buscarPrestamo());
+
+		btnMostrarPrestamos.addActionListener(e -> {
+			txtBuscarPrestamo.setText("");
+			cargarPrestamos();
+		});
 
 		// ==================== CATEGORÍAS ====================
 		panelCategorias = new JPanel();
@@ -311,6 +399,24 @@ public class Principal {
 		});
 
 		tabbedPane.addTab("Categorías", null, panelCategorias, null);
+		txtBuscarCategoria = new javax.swing.JTextField();
+		txtBuscarCategoria.setBounds(680, 150, 150, 25);
+		panelCategorias.add(txtBuscarCategoria);
+
+		btnBuscarCategoria = new JButton("Buscar");
+		btnBuscarCategoria.setBounds(680, 185, 150, 30);
+		panelCategorias.add(btnBuscarCategoria);
+
+		btnMostrarCategorias = new JButton("Mostrar todos");
+		btnMostrarCategorias.setBounds(680, 225, 150, 30);
+		panelCategorias.add(btnMostrarCategorias);
+
+		btnBuscarCategoria.addActionListener(e -> buscarCategoria());
+
+		btnMostrarCategorias.addActionListener(e -> {
+			txtBuscarCategoria.setText("");
+			cargarCategorias();
+		});
 
 		// ==================== TIPOS ====================
 		panelTipos = new JPanel();
@@ -356,10 +462,161 @@ public class Principal {
 		});
 
 		tabbedPane.addTab("Tipos", null, panelTipos, null);
+		txtBuscarTipo = new javax.swing.JTextField();
+		txtBuscarTipo.setBounds(680, 150, 150, 25);
+		panelTipos.add(txtBuscarTipo);
+
+		btnBuscarTipo = new JButton("Buscar");
+		btnBuscarTipo.setBounds(680, 185, 150, 30);
+		panelTipos.add(btnBuscarTipo);
+
+		btnMostrarTipos = new JButton("Mostrar todos");
+		btnMostrarTipos.setBounds(680, 225, 150, 30);
+		panelTipos.add(btnMostrarTipos);
+
+		btnBuscarTipo.addActionListener(e -> buscarTipo());
+
+		btnMostrarTipos.addActionListener(e -> {
+			txtBuscarTipo.setText("");
+			cargarTipos();
+		});
 	}
 
 	// ==================== MÉTODOS ====================
 
+	private void buscarPersona() {
+		String texto = txtBuscarPersona.getText().toLowerCase();
+
+		javax.swing.table.DefaultTableModel model =
+			(javax.swing.table.DefaultTableModel) tablaPersonas.getModel();
+
+		model.setRowCount(0);
+
+		for (logica.Persona p : SistemaControl.getInstance().obtenerListadoPersonas()) {
+			if (p.getNombre().toLowerCase().contains(texto)
+				|| p.getTelefono().toLowerCase().contains(texto)
+				|| p.getCorreo().toLowerCase().contains(texto)) {
+
+				model.addRow(new Object[] {
+					p.getId(),
+					p.getNombre(),
+					p.getTelefono(),
+					p.getCorreo()
+				});
+			}
+		}
+	}
+
+	private void buscarPrestamo() {
+		String texto = txtBuscarPrestamo.getText().toLowerCase();
+
+		javax.swing.table.DefaultTableModel model =
+			(javax.swing.table.DefaultTableModel) tablaPrestamos.getModel();
+
+		model.setRowCount(0);
+
+		for (logica.Persona persona : SistemaControl.getInstance().obtenerListadoPersonas()) {
+			if (!persona.getPrestamos().isEmpty()
+				&& persona.getNombre().toLowerCase().contains(texto)) {
+
+				int cantidadItems = 0;
+
+				for (logica.Prestamo p : persona.getPrestamos()) {
+					cantidadItems += p.getItems().size();
+				}
+
+				model.addRow(new Object[] {
+					persona.getNombre(),
+					persona.getPrestamos().size(),
+					cantidadItems
+				});
+			}
+		}
+	}
+
+	private void buscarCategoria() {
+		String texto = txtBuscarCategoria.getText().toLowerCase();
+
+		javax.swing.table.DefaultTableModel model =
+			(javax.swing.table.DefaultTableModel) tablaCategorias.getModel();
+
+		model.setRowCount(0);
+
+		for (logica.Categoria c : SistemaControl.getInstance().obtenerListadoCategorias()) {
+			if (c.getNombre().toLowerCase().contains(texto)) {
+				model.addRow(new Object[] {
+					c.getNombre()
+				});
+			}
+		}
+	}
+
+	private void buscarTipo() {
+		String texto = txtBuscarTipo.getText().toLowerCase();
+
+		javax.swing.table.DefaultTableModel model =
+			(javax.swing.table.DefaultTableModel) tablaTipos.getModel();
+
+		model.setRowCount(0);
+
+		for (logica.Tipo t : SistemaControl.getInstance().obtenerListadoTipos()) {
+			if (t.getNombre().toLowerCase().contains(texto)) {
+				model.addRow(new Object[] {
+					t.getNombre()
+				});
+			}
+		}
+	}
+	
+	private void buscarItem() {
+		String texto = txtBuscarItem.getText();
+
+		javax.swing.table.DefaultTableModel model =
+			(javax.swing.table.DefaultTableModel) tablaItems.getModel();
+
+		model.setRowCount(0);
+
+		try {
+			for (logica.Item it : SistemaControl.getInstance().obtenerListadoItems()) {
+
+				if (it.getNombre().toLowerCase().contains(texto.toLowerCase())
+					|| it.getDescripcion().toLowerCase().contains(texto.toLowerCase())
+					|| it.getTipo().getNombre().toLowerCase().contains(texto.toLowerCase())
+					|| obtenerNombresCategorias(it).toLowerCase().contains(texto.toLowerCase())) {
+
+					Object[] fila = new Object[] {
+						it.getNombre(),
+						it.getDescripcion(),
+						it.getTipo().getNombre(),
+						obtenerNombresCategorias(it),
+						it.isPrestado() ? "Sí" : "No"
+					};
+
+					model.addRow(fila);
+				}
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(
+				frame,
+				"Error al buscar item: " + e.getMessage(),
+				"Error",
+				JOptionPane.ERROR_MESSAGE
+			);
+		}
+	}
+	
+	private String obtenerNombresCategorias(logica.Item item) {
+		StringBuilder sb = new StringBuilder();
+
+		for (logica.Categoria c : item.getCategorias()) {
+			if (sb.length() > 0) {
+				sb.append(", ");
+			}
+			sb.append(c.getNombre());
+		}
+
+		return sb.toString();
+	}
 	private void cargarItems() {
 		SistemaControl control = SistemaControl.getInstance();
 
@@ -374,6 +631,7 @@ public class Principal {
 					it.getNombre(),
 					it.getDescripcion(),
 					it.getTipo().getNombre(),
+					obtenerNombresCategorias(it),
 					it.isPrestado() ? "Sí" : "No"
 				};
 				model.addRow(fila);
@@ -387,7 +645,6 @@ public class Principal {
 			);
 		}
 	}
-
 	private void borrarItem() {
 		int fila = tablaItems.getSelectedRow();
 
@@ -428,18 +685,14 @@ public class Principal {
 		int fila = tablaPersonas.getSelectedRow();
 
 		if (fila == -1) {
-			JOptionPane.showMessageDialog(
-				frame,
-				"Debe seleccionar una persona.",
-				"Error",
-				JOptionPane.ERROR_MESSAGE
-			);
+			JOptionPane.showMessageDialog(frame, "Debe seleccionar una persona.", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 
-		String id = (String) tablaPersonas.getValueAt(fila, 0);
+		String nombre = (String) tablaPersonas.getValueAt(fila, 0);
+		logica.Persona persona = SistemaControl.getInstance().buscarPersonaPorNombre(nombre);
 
-		EditarPersona dialog = new EditarPersona(frame, id);
+		EditarPersona dialog = new EditarPersona(frame, persona.getId());
 		dialog.setVisible(true);
 		cargarPersonas();
 	}
@@ -448,17 +701,12 @@ public class Principal {
 		int fila = tablaPersonas.getSelectedRow();
 
 		if (fila == -1) {
-			JOptionPane.showMessageDialog(
-				frame,
-				"Debe seleccionar una persona.",
-				"Error",
-				JOptionPane.ERROR_MESSAGE
-			);
+			JOptionPane.showMessageDialog(frame, "Debe seleccionar una persona.", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 
-		String id = (String) tablaPersonas.getValueAt(fila, 0);
-		String nombre = (String) tablaPersonas.getValueAt(fila, 1);
+		String nombre = (String) tablaPersonas.getValueAt(fila, 0);
+		logica.Persona persona = SistemaControl.getInstance().buscarPersonaPorNombre(nombre);
 
 		int respuesta = JOptionPane.showConfirmDialog(
 			frame,
@@ -469,16 +717,10 @@ public class Principal {
 
 		if (respuesta == JOptionPane.YES_OPTION) {
 			try {
-				SistemaControl.getInstance().borrarPersona(id);
+				SistemaControl.getInstance().borrarPersona(persona.getId());
 				cargarPersonas();
-
 			} catch (Exception e) {
-				JOptionPane.showMessageDialog(
-					frame,
-					"Error al borrar persona: " + e.getMessage(),
-					"Error",
-					JOptionPane.ERROR_MESSAGE
-				);
+				JOptionPane.showMessageDialog(frame, "Error al borrar persona: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
@@ -544,50 +786,7 @@ public class Principal {
 		cargarItems();
 	}
 
-	private void verReportePrestamo() {
-		int fila = tablaPrestamos.getSelectedRow();
-
-		if (fila == -1) {
-			JOptionPane.showMessageDialog(
-				frame,
-				"Debe seleccionar un préstamo.",
-				"Error",
-				JOptionPane.ERROR_MESSAGE
-			);
-			return;
-		}
-
-		String codigo = (String) tablaPrestamos.getValueAt(fila, 0);
-
-		try {
-			logica.Prestamo prestamo = SistemaControl.getInstance().obtenerPrestamo(codigo);
-
-			StringBuilder sb = new StringBuilder();
-			sb.append("Código: ").append(prestamo.getCodigo()).append("\n");
-			sb.append("Fecha: ").append(prestamo.getFecha()).append("\n");
-			sb.append("Persona: ").append(prestamo.getPersona().getNombre()).append("\n\n");
-			sb.append("Ítems:\n");
-
-			for (logica.Item item : prestamo.getItems()) {
-				sb.append("- ").append(item.getNombre()).append("\n");
-			}
-
-			JOptionPane.showMessageDialog(
-				frame,
-				sb.toString(),
-				"Detalle del préstamo",
-				JOptionPane.INFORMATION_MESSAGE
-			);
-
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(
-				frame,
-				"Error al mostrar préstamo: " + e.getMessage(),
-				"Error",
-				JOptionPane.ERROR_MESSAGE
-			);
-		}
-	}
+	
 	
 	private void borrarCategoria() {
 		int fila = tablaCategorias.getSelectedRow();
@@ -723,7 +922,6 @@ public class Principal {
 		try {
 			for (logica.Persona p : control.obtenerListadoPersonas()) {
 				Object[] fila = new Object[] {
-					p.getId(),
 					p.getNombre(),
 					p.getTelefono(),
 					p.getCorreo()
