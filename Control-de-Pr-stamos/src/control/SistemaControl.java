@@ -447,7 +447,7 @@ public class SistemaControl implements Serializable {
 		if (!mensajes.isEmpty())
 			guardarDatos();
 		return mensajes;
-	}
+	} 
 
 	//  PERSISTENCIA 
 
