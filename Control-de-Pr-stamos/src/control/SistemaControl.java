@@ -597,10 +597,17 @@ public class SistemaControl implements Serializable {
 	//  PERSISTENCIA 
 
 	public void guardarDatos() {
-		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ARCHIVO_DATOS))) {
+		File archivo = new File(ARCHIVO_DATOS);
+
+		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(archivo))) {
 			oos.writeObject(this);
+
+			System.out.println("Datos guardados correctamente en:");
+			System.out.println(archivo.getAbsolutePath());
+
 		} catch (IOException e) {
-			System.err.println("Error al guardar: " + e.getMessage());
+			System.err.println("Error al guardar datos:");
+			e.printStackTrace();
 		}
 	}
 	public static void cargarDatos() {
