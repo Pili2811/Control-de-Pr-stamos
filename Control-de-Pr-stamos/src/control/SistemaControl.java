@@ -44,13 +44,14 @@ public class SistemaControl implements Serializable {
 
 	// VERIFICACIONES 
 
-	private void verificarItemExistente(String nombre) throws Exception {
-		if (buscarItem(nombre) == null)
+	private void verificarItemExistente(String codigo) throws Exception {
+		if (buscarItem(codigo) == null)
 			throw new Exception("Item no encontrado.");
 	}
-	private void verificarItemNoExistente(String nombre) throws Exception {
-		if (buscarItem(nombre) != null)
-			throw new Exception("Ya existe un item con ese nombre.");
+
+	private void verificarItemNoExistente(String codigo) throws Exception {
+		if (buscarItem(codigo) != null)
+			throw new Exception("Ya existe un item con ese código.");
 	}
 	private void verificarPersonaExistente(String id) throws Exception {
 		if (buscarPersona(id) == null)
@@ -78,60 +79,84 @@ public class SistemaControl implements Serializable {
 	}
 
 	//  ITEMS
-
-	public Item buscarItem(String nombre) {
-		if (nombre == null)
+	
+	public Item buscarItem(String codigo) {
+		if (codigo == null)
 			return null;
+	
 		for (Item it : items) {
-			if (it.getNombre().equalsIgnoreCase(nombre))
+			if (it.getCodigo().equalsIgnoreCase(codigo))
 				return it;
 		}
+	
 		return null;
 	}
-	public Item obtenerItem(String nombre) throws Exception {
-		verificarItemExistente(nombre);
-		return buscarItem(nombre);
+	
+	public Item obtenerItem(String codigo) throws Exception {
+		verificarItemExistente(codigo);
+		return buscarItem(codigo);
 	}
+	
 	public List<Item> obtenerListadoItems() {
 		return items;
 	}
-	public void crearItem(String nombre, String descripcion) throws Exception {
+	
+	public void crearItem(String codigo, String nombre, String descripcion) throws Exception {
+		if (codigo == null || codigo.isBlank())
+			throw new Exception("El código no puede ser vacío.");
+	
 		if (nombre == null || nombre.isBlank())
-			throw new Exception("El nombre no puede ser vacio.");
-		verificarItemNoExistente(nombre);
-		Item item = new Item(nombre, descripcion, obtenerTipoGenerico());
+			throw new Exception("El nombre no puede ser vacío.");
+	
+		verificarItemNoExistente(codigo);
+	
+		Item item = new Item(codigo, nombre, descripcion, obtenerTipoGenerico());
 		items.add(item);
 		guardarDatos();
 	}
-	public void modificarItem(String nombreActual, String nuevoNombre, String descripcion) throws Exception {
-		Item item = obtenerItem(nombreActual);
+	
+	public void modificarItem(String codigo, String nuevoNombre, String descripcion) throws Exception {
+		Item item = obtenerItem(codigo);
+	
+		if (nuevoNombre == null || nuevoNombre.isBlank())
+			throw new Exception("El nombre no puede ser vacío.");
+	
 		item.setNombre(nuevoNombre);
 		item.setDescripcion(descripcion);
 		guardarDatos();
 	}
-	public void borrarItem(String nombre) throws Exception {
-		Item item = obtenerItem(nombre);
+	
+	public void borrarItem(String codigo) throws Exception {
+		Item item = obtenerItem(codigo);
+	
 		if (item.isPrestado())
-			throw new Exception("El item se encuentra en un prestamo.");
+			throw new Exception("El item se encuentra en un préstamo.");
+	
 		item.desvincular();
 		items.remove(item);
 		guardarDatos();
 	}
-	public void asignarTipoItem(String nombreItem, String nombreTipo) throws Exception {
-		Item item = obtenerItem(nombreItem);
+	
+	public void asignarTipoItem(String codigoItem, String nombreTipo) throws Exception {
+		Item item = obtenerItem(codigoItem);
 		Tipo tipo = obtenerTipo(nombreTipo);
+	
 		item.setTipo(tipo);
 		guardarDatos();
 	}
-	public void agregarCategoriaAItem(String nombreItem, String nombreCategoria) throws Exception {
-		Item item = obtenerItem(nombreItem);
+	
+	public void agregarCategoriaAItem(String codigoItem, String nombreCategoria) throws Exception {
+		Item item = obtenerItem(codigoItem);
 		Categoria categoria = obtenerCategoria(nombreCategoria);
+	
 		item.agregarCategoria(categoria);
 		guardarDatos();
 	}
-	public void quitarCategoriaDeItem(String nombreItem, String nombreCategoria) throws Exception {
-		Item item = obtenerItem(nombreItem);
+	
+	public void quitarCategoriaDeItem(String codigoItem, String nombreCategoria) throws Exception {
+		Item item = obtenerItem(codigoItem);
 		Categoria categoria = obtenerCategoria(nombreCategoria);
+	
 		item.quitarCategoria(categoria);
 		guardarDatos();
 	}
@@ -292,9 +317,9 @@ public class SistemaControl implements Serializable {
 	public List<Prestamo> obtenerListadoPrestamos() {
 		return prestamos;
 	}
-	public String hacerPrestamo(String personaId, String itemNombre) throws Exception {
+	public String hacerPrestamo(String personaId, String codigoItem) throws Exception {
 		Persona persona = obtenerPersona(personaId);
-		Item item = obtenerItem(itemNombre);
+		Item item = obtenerItem(codigoItem);
 		if (item.isPrestado())
 			throw new Exception("El item ya se encuentra prestado.");
 		String codigo = "P-" + UUID.randomUUID().toString().substring(0, 8);
@@ -305,27 +330,27 @@ public class SistemaControl implements Serializable {
 		guardarDatos();
 		return codigo;
 	}
-	public void agregarItemPrestamo(String prestamoCod, String itemNombre) throws Exception {
+	public void agregarItemPrestamo(String prestamoCod, String codigoItem) throws Exception {
 		Prestamo prestamo = obtenerPrestamo(prestamoCod);
-		Item item = obtenerItem(itemNombre);
+		Item item = obtenerItem(codigoItem);
 		if (item.isPrestado())
 			throw new Exception("El item ya se encuentra prestado.");
 		prestamo.agregarItem(item);
 		guardarDatos();
 	}
-	public void eliminarItemPrestamo(String prestamoCod, String itemNombre) throws Exception {
+	public void eliminarItemPrestamo(String prestamoCod, String codigoItem) throws Exception {
 		Prestamo prestamo = obtenerPrestamo(prestamoCod);
-		Item item = obtenerItem(itemNombre);
+		Item item = obtenerItem(codigoItem);
 		if (!prestamo.getItems().contains(item))
-			throw new Exception("El item no pertenece a este prestamo.");
+			throw new Exception("El item no pertenece a este préstamo.");
 		prestamo.quitarItem(item);
 		guardarDatos();
 	}
-	public void retornarItem(String prestamoCod, String itemNombre) throws Exception {
+	public void retornarItem(String prestamoCod, String codigoItem) throws Exception {
 		Prestamo prestamo = obtenerPrestamo(prestamoCod);
-		Item item = obtenerItem(itemNombre);
+		Item item = obtenerItem(codigoItem);
 		if (!prestamo.getItems().contains(item))
-			throw new Exception("El item no pertenece a este prestamo.");
+			throw new Exception("El item no pertenece a este préstamo.");
 		prestamo.quitarItem(item);
 		if (prestamo.getItems().isEmpty()) {
 			prestamo.getPersona().quitarPrestamo(prestamo);
@@ -350,17 +375,25 @@ public class SistemaControl implements Serializable {
 
 	public String reporteUsuario(String personaId) throws Exception {
 		Persona persona = obtenerPersona(personaId);
-		StringBuilder sb = new StringBuilder("=== Reporte de usuario ===\n\n");
+
+		StringBuilder sb = new StringBuilder();
+
 		sb.append("Nombre: ").append(persona.getNombre()).append("\n");
-		sb.append("Telefono: ").append(persona.getTelefono()).append("\n");
-		sb.append("Correo: ").append(persona.getCorreo()).append("\n\n");
+		sb.append("Teléfono: ").append(persona.getTelefono()).append("\n");
+		sb.append("Correo: ").append(persona.getCorreo()).append("\n");
 		if (persona.getPrestamos().isEmpty()) {
-			sb.append("Sin prestamos activos.\n");
+			sb.append("Préstamos: Sin préstamos activos.\n");
 		} else {
 			for (Prestamo pr : persona.getPrestamos()) {
-				sb.append("Prestamo [").append(pr.getCodigo()).append("]: ");
-				for (Item it : pr.getItems()) {
-					sb.append(it.getNombre()).append(", ");
+				sb.append("Préstamo [").append(pr.getCodigo()).append("]: ");
+				for (int i = 0; i < pr.getItems().size(); i++) {
+					Item it = pr.getItems().get(i);
+					if (i > 0) {
+						sb.append(", ");
+					}
+					sb.append(it.getCodigo())
+					  .append(" - ")
+					  .append(it.getNombre());
 				}
 				sb.append("\n");
 			}
@@ -378,56 +411,168 @@ public class SistemaControl implements Serializable {
 	}
 	public String reporteCategoria(String categoriaNombre) throws Exception {
 		Categoria categoria = obtenerCategoria(categoriaNombre);
-		StringBuilder sb = new StringBuilder("=== Reporte por categoria ===\n\n");
-		sb.append("Categoria: ").append(categoria.getNombre()).append("\n");
-		for (Item it : categoria.getItems()) {
-			sb.append("  - ").append(it.getNombre()).append(" (Prestado: ").append(it.isPrestado() ? "Si" : "No").append(")\n");
+		StringBuilder sb = new StringBuilder();
+		sb.append("Categoría: ").append(categoria.getNombre()).append("\n");
+		if (categoria.getItems().isEmpty()) {
+			sb.append("Sin ítems registrados en esta categoría.\n");
+		} else {
+			for (Item it : categoria.getItems()) {
+				sb.append("- ")
+				  .append(it.getCodigo())
+				  .append(" - ")
+				  .append(it.getNombre())
+				  .append(" | Prestado: ")
+				  .append(it.isPrestado() ? "Sí" : "No")
+				  .append("\n");
+			}
 		}
 		return sb.toString();
 	}
 	public String reporteTipo(String tipoNombre) throws Exception {
 		Tipo tipo = obtenerTipo(tipoNombre);
-		StringBuilder sb = new StringBuilder("=== Reporte por tipo ===\n\n");
+		StringBuilder sb = new StringBuilder();
 		sb.append("Tipo: ").append(tipo.getNombre()).append("\n");
-		for (Item it : tipo.getItems()) {
-			sb.append("  - ").append(it.getNombre()).append(" (Prestado: ").append(it.isPrestado() ? "Si" : "No").append(")\n");
+		if (tipo.getItems().isEmpty()) {
+			sb.append("Sin ítems registrados en este tipo.\n");
+		} else {
+			for (Item it : tipo.getItems()) {
+				sb.append("- ")
+				  .append(it.getCodigo())
+				  .append(" - ")
+				  .append(it.getNombre())
+				  .append(" | Prestado: ")
+				  .append(it.isPrestado() ? "Sí" : "No")
+				  .append("\n");
+			}
 		}
 		return sb.toString();
 	}
 	public String reporteTodosUsuarios() throws Exception {
 		List<Persona> lista = new ArrayList<Persona>(personas);
 		lista.sort(Comparator.comparing(Persona::getNombre));
-		StringBuilder sb = new StringBuilder("=== Reporte por usuarios ===\n\n");
-		for (Persona p : lista) {
-			sb.append(reporteUsuario(p.getId())).append("\n");
+
+		StringBuilder sb = new StringBuilder("=== Reporte por usuarios ===\n");
+
+		for (Persona persona : lista) {
+			sb.append("\nNombre: ").append(persona.getNombre()).append("\n");
+			sb.append("Teléfono: ").append(persona.getTelefono()).append("\n");
+			sb.append("Correo: ").append(persona.getCorreo()).append("\n");
+
+			if (persona.getPrestamos().isEmpty()) {
+				sb.append("Préstamos: Sin préstamos activos.\n");
+			} else {
+				for (Prestamo pr : persona.getPrestamos()) {
+					sb.append("Préstamo [").append(pr.getCodigo()).append("]: ");
+
+					for (Item it : pr.getItems()) {
+						sb.append(it.getNombre()).append(", ");
+					}
+
+					sb.append("\n");
+				}
+			}
+
+			sb.append("----------------------------------------\n");
 		}
+
 		return sb.toString();
 	}
+
 	public String reporteTodosItems() throws Exception {
 		List<Item> lista = new ArrayList<Item>(items);
 		lista.sort(Comparator.comparing(Item::getNombre));
-		StringBuilder sb = new StringBuilder("=== Reporte por items ===\n\n");
-		for (Item it : lista) {
-			sb.append(reporteItem(it.getNombre())).append("\n");
+
+		StringBuilder sb = new StringBuilder("=== Reporte por ítems ===\n");
+
+		for (Item item : lista) {
+			sb.append("\nCódigo: ").append(item.getCodigo()).append("\n");
+			sb.append("Nombre: ").append(item.getNombre()).append("\n");
+			sb.append("Descripción: ").append(item.getDescripcion()).append("\n");
+
+			if (item.getTipo() != null) {
+				sb.append("Tipo: ").append(item.getTipo().getNombre()).append("\n");
+			} else {
+				sb.append("Tipo: Sin tipo\n");
+			}
+
+			sb.append("Categorías: ");
+
+			if (item.getCategorias().isEmpty()) {
+				sb.append("Sin categorías");
+			} else {
+				for (Categoria c : item.getCategorias()) {
+					sb.append(c.getNombre()).append(", ");
+				}
+			}
+
+			sb.append("\n");
+			sb.append("Prestado: ").append(item.isPrestado() ? "Sí" : "No").append("\n");
+
+			if (item.isPrestado() && item.getPrestamo() != null) {
+				sb.append("Usuario que lo tiene: ")
+				  .append(item.getPrestamo().getPersona().getNombre())
+				  .append("\n");
+			} else {
+				sb.append("Usuario que lo tiene: Ninguno\n");
+			}
+
+			sb.append("----------------------------------------\n");
 		}
+
 		return sb.toString();
 	}
+
 	public String reporteTodasCategorias() throws Exception {
 		List<Categoria> lista = new ArrayList<Categoria>(categorias);
 		lista.sort(Comparator.comparing(Categoria::getNombre));
-		StringBuilder sb = new StringBuilder("=== Reporte por categorias ===\n\n");
-		for (Categoria c : lista) {
-			sb.append(reporteCategoria(c.getNombre())).append("\n");
+
+		StringBuilder sb = new StringBuilder("=== Reporte por categorías ===\n");
+
+		for (Categoria categoria : lista) {
+			sb.append("\nCategoría: ").append(categoria.getNombre()).append("\n");
+
+			if (categoria.getItems().isEmpty()) {
+				sb.append("Sin ítems registrados en esta categoría.\n");
+			} else {
+				for (Item it : categoria.getItems()) {
+					sb.append("- ")
+					  .append(it.getNombre())
+					  .append(" | Prestado: ")
+					  .append(it.isPrestado() ? "Sí" : "No")
+					  .append("\n");
+				}
+			}
+
+			sb.append("----------------------------------------\n");
 		}
+
 		return sb.toString();
 	}
+
 	public String reporteTodosTipos() throws Exception {
 		List<Tipo> lista = new ArrayList<Tipo>(tipos);
 		lista.sort(Comparator.comparing(Tipo::getNombre));
-		StringBuilder sb = new StringBuilder("=== Reporte por tipos ===\n\n");
-		for (Tipo t : lista) {
-			sb.append(reporteTipo(t.getNombre())).append("\n");
+
+		StringBuilder sb = new StringBuilder("=== Reporte por tipos ===\n");
+
+		for (Tipo tipo : lista) {
+			sb.append("\nTipo: ").append(tipo.getNombre()).append("\n");
+
+			if (tipo.getItems().isEmpty()) {
+				sb.append("Sin ítems registrados en este tipo.\n");
+			} else {
+				for (Item it : tipo.getItems()) {
+					sb.append("- ")
+					  .append(it.getNombre())
+					  .append(" | Prestado: ")
+					  .append(it.isPrestado() ? "Sí" : "No")
+					  .append("\n");
+				}
+			}
+
+			sb.append("----------------------------------------\n");
 		}
+
 		return sb.toString();
 	}
 

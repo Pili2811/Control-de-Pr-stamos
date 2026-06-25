@@ -132,11 +132,11 @@ public class EditarItem extends JDialog {
 	}
 
 	private void guardarCambios() {
-		String nuevoNombre = txtNombre.getText();
-		String descripcion = txtDescripcion.getText();
+		String nuevoNombre = txtNombre.getText().trim();
+		String descripcion = txtDescripcion.getText().trim();
 		Tipo tipo = (Tipo) comboTipo.getSelectedItem();
 
-		if (nuevoNombre == null || nuevoNombre.isBlank()) {
+		if (nuevoNombre.isBlank()) {
 			JOptionPane.showMessageDialog(
 				this,
 				"El nombre no puede estar vacío.",
@@ -161,15 +161,15 @@ public class EditarItem extends JDialog {
 
 			Item item = control.obtenerItem(nombreActual);
 
-			for (Categoria c : item.getCategorias()) {
+			for (Categoria c : new java.util.ArrayList<Categoria>(item.getCategorias())) {
 				control.quitarCategoriaDeItem(nombreActual, c.getNombre());
 			}
 
 			control.modificarItem(nombreActual, nuevoNombre, descripcion);
-			control.asignarTipoItem(nuevoNombre, tipo.getNombre());
+			control.asignarTipoItem(nombreActual, tipo.getNombre());
 
 			for (Categoria c : listaCategorias.getSelectedValuesList()) {
-				control.agregarCategoriaAItem(nuevoNombre, c.getNombre());
+				control.agregarCategoriaAItem(nombreActual, c.getNombre());
 			}
 
 			JOptionPane.showMessageDialog(

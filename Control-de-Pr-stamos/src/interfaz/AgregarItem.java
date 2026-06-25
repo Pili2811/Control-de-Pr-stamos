@@ -18,6 +18,7 @@ import logica.Categoria;
 
 public class AgregarItem extends JDialog {
 
+	private JTextField txtCodigo;
 	private JTextField txtNombre;
 	private JTextField txtDescripcion;
 	private JComboBox<Tipo> comboTipo;
@@ -26,37 +27,45 @@ public class AgregarItem extends JDialog {
 
 	public AgregarItem(JFrame parent) {
 		setTitle("Agregar Item");
-		setBounds(100, 100, 460, 380);
+		setBounds(100, 100, 460, 420);
 		setModal(true);
 		setLocationRelativeTo(parent);
 		getContentPane().setLayout(null);
 
+		JLabel lblCodigo = new JLabel("Código:");
+		lblCodigo.setBounds(20, 20, 100, 20);
+		getContentPane().add(lblCodigo);
+
+		txtCodigo = new JTextField();
+		txtCodigo.setBounds(130, 20, 260, 22);
+		getContentPane().add(txtCodigo);
+
 		JLabel lblNombre = new JLabel("Nombre:");
-		lblNombre.setBounds(20, 20, 100, 20);
+		lblNombre.setBounds(20, 60, 100, 20);
 		getContentPane().add(lblNombre);
 
 		txtNombre = new JTextField();
-		txtNombre.setBounds(130, 20, 260, 22);
+		txtNombre.setBounds(130, 60, 260, 22);
 		getContentPane().add(txtNombre);
 
 		JLabel lblDescripcion = new JLabel("Descripción:");
-		lblDescripcion.setBounds(20, 60, 100, 20);
+		lblDescripcion.setBounds(20, 100, 100, 20);
 		getContentPane().add(lblDescripcion);
 
 		txtDescripcion = new JTextField();
-		txtDescripcion.setBounds(130, 60, 260, 22);
+		txtDescripcion.setBounds(130, 100, 260, 22);
 		getContentPane().add(txtDescripcion);
 
 		JLabel lblTipo = new JLabel("Tipo:");
-		lblTipo.setBounds(20, 100, 100, 20);
+		lblTipo.setBounds(20, 140, 100, 20);
 		getContentPane().add(lblTipo);
 
 		comboTipo = new JComboBox<Tipo>();
-		comboTipo.setBounds(130, 100, 260, 22);
+		comboTipo.setBounds(130, 140, 260, 22);
 		getContentPane().add(comboTipo);
 
 		JLabel lblCategorias = new JLabel("Categorías:");
-		lblCategorias.setBounds(20, 140, 100, 20);
+		lblCategorias.setBounds(20, 180, 100, 20);
 		getContentPane().add(lblCategorias);
 
 		modeloCategorias = new DefaultListModel<Categoria>();
@@ -64,15 +73,15 @@ public class AgregarItem extends JDialog {
 		listaCategorias.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		JScrollPane scrollCategorias = new JScrollPane(listaCategorias);
-		scrollCategorias.setBounds(130, 140, 260, 110);
+		scrollCategorias.setBounds(130, 180, 260, 110);
 		getContentPane().add(scrollCategorias);
 
 		JButton btnGuardar = new JButton("Guardar");
-		btnGuardar.setBounds(100, 285, 100, 25);
+		btnGuardar.setBounds(100, 325, 100, 25);
 		getContentPane().add(btnGuardar);
 
 		JButton btnCancelar = new JButton("Cancelar");
-		btnCancelar.setBounds(220, 285, 100, 25);
+		btnCancelar.setBounds(220, 325, 100, 25);
 		getContentPane().add(btnCancelar);
 
 		btnGuardar.addActionListener(e -> guardarItem());
@@ -97,11 +106,22 @@ public class AgregarItem extends JDialog {
 	}
 
 	private void guardarItem() {
-		String nombre = txtNombre.getText();
-		String descripcion = txtDescripcion.getText();
+		String codigo = txtCodigo.getText().trim();
+		String nombre = txtNombre.getText().trim();
+		String descripcion = txtDescripcion.getText().trim();
 		Tipo tipo = (Tipo) comboTipo.getSelectedItem();
 
-		if (nombre == null || nombre.isBlank()) {
+		if (codigo.isBlank()) {
+			JOptionPane.showMessageDialog(
+				this,
+				"El código no puede estar vacío.",
+				"Error",
+				JOptionPane.ERROR_MESSAGE
+			);
+			return;
+		}
+
+		if (nombre.isBlank()) {
 			JOptionPane.showMessageDialog(
 				this,
 				"El nombre no puede estar vacío.",
@@ -124,13 +144,13 @@ public class AgregarItem extends JDialog {
 		try {
 			SistemaControl control = SistemaControl.getInstance();
 
-			control.crearItem(nombre, descripcion);
-			control.asignarTipoItem(nombre, tipo.getNombre());
+			control.crearItem(codigo, nombre, descripcion);
+
+			control.asignarTipoItem(codigo, tipo.getNombre());
 
 			for (Categoria c : listaCategorias.getSelectedValuesList()) {
-				control.agregarCategoriaAItem(nombre, c.getNombre());
+				control.agregarCategoriaAItem(codigo, c.getNombre());
 			}
-
 			JOptionPane.showMessageDialog(
 				this,
 				"Item agregado correctamente."

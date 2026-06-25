@@ -97,7 +97,7 @@ public class AgregarPrestamo extends JDialog {
 		try {
 			SistemaControl.getInstance().hacerPrestamo(
 				persona.getId(),
-				item.getNombre()
+				item.getCodigo()
 			);
 
 			JOptionPane.showMessageDialog(

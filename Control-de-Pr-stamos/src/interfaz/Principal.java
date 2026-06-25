@@ -1,6 +1,7 @@
 package interfaz;
 
 import java.awt.BorderLayout;
+import javax.swing.JTextArea;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -19,7 +20,7 @@ import control.SistemaControl;
 public class Principal {
 
 	private JFrame frame;
-	private JTabbedPane tabbedPane;
+	private JTabbedPane tabbedPane;	
 
 	// Paneles
 	private JPanel panelItems;
@@ -27,6 +28,12 @@ public class Principal {
 	private JPanel panelPrestamos;
 	private JPanel panelCategorias;
 	private JPanel panelTipos;
+	private JPanel panelReportes;
+	private JTextArea txtReporte;
+	private JButton btnReporteUsuarios;
+	private JButton btnReporteItems;
+	private JButton btnReporteCategorias;
+	private JButton btnReporteTipos;
 
 	// ÍTEMS
 	private JTable tablaItems;
@@ -148,16 +155,17 @@ public class Principal {
 		tablaItems = new JTable();
 		tablaItems.setModel(new javax.swing.table.DefaultTableModel(
 			new Object[][] {},
-			new String[] { "Nombre", "Descripción", "Tipo", "Categorías", "Prestado" }
+			new String[] { "Código", "Nombre", "Descripción", "Tipo", "Categorías", "Prestado" }
 		) {
 			Class[] columnTypes = new Class[] {
-				String.class, String.class, String.class, String.class, String.class
+				String.class, String.class, String.class, String.class, String.class, String.class
 			};
 
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
 			}
 		});
+		scrollItems.setViewportView(tablaItems);
 		scrollItems.setViewportView(tablaItems);
 
 		btnAgregarItem = new JButton("Agregar");
@@ -199,25 +207,7 @@ public class Principal {
 			txtBuscarItem.setText("");
 			cargarItems();
 		});
-		txtBuscarItem = new javax.swing.JTextField();
-		txtBuscarItem.setBounds(680, 150, 150, 25);
-		panelItems.add(txtBuscarItem);
 
-		btnBuscarItem = new JButton("Buscar");
-		btnBuscarItem.setBounds(680, 185, 150, 30);
-		panelItems.add(btnBuscarItem);
-
-		btnMostrarItems = new JButton("Mostrar todos");
-		btnMostrarItems.setBounds(680, 225, 150, 30);
-		panelItems.add(btnMostrarItems);
-
-		btnBuscarItem.addActionListener(e -> buscarItem());
-
-		btnMostrarItems.addActionListener(e -> {
-			txtBuscarItem.setText("");
-			cargarItems();
-		});
-		
 
 		// ==================== PERSONAS ====================
 		panelPersonas = new JPanel();
@@ -480,10 +470,97 @@ public class Principal {
 			txtBuscarTipo.setText("");
 			cargarTipos();
 		});
+		// ==================== REPORTES ====================
+		panelReportes = new JPanel();
+		panelReportes.setLayout(null);
+
+		btnReporteUsuarios = new JButton("Por usuarios");
+		btnReporteUsuarios.setBounds(680, 20, 150, 30);
+		panelReportes.add(btnReporteUsuarios);
+
+		btnReporteItems = new JButton("Por ítems");
+		btnReporteItems.setBounds(680, 60, 150, 30);
+		panelReportes.add(btnReporteItems);
+
+		btnReporteCategorias = new JButton("Por categorías");
+		btnReporteCategorias.setBounds(680, 100, 150, 30);
+		panelReportes.add(btnReporteCategorias);
+
+		btnReporteTipos = new JButton("Por tipos");
+		btnReporteTipos.setBounds(680, 140, 150, 30);
+		panelReportes.add(btnReporteTipos);
+
+		txtReporte = new JTextArea();
+		txtReporte.setEditable(false);
+		txtReporte.setLineWrap(true);
+		txtReporte.setWrapStyleWord(true);
+
+		JScrollPane scrollReportes = new JScrollPane(txtReporte);
+		scrollReportes.setBounds(10, 11, 650, 450);
+		panelReportes.add(scrollReportes);
+
+		btnReporteUsuarios.addActionListener(e -> generarReporteUsuarios());
+		btnReporteItems.addActionListener(e -> generarReporteItems());
+		btnReporteCategorias.addActionListener(e -> generarReporteCategorias());
+		btnReporteTipos.addActionListener(e -> generarReporteTipos());
+
+		tabbedPane.addTab("Reportes", null, panelReportes, null);
 	}
 
 	// ==================== MÉTODOS ====================
 
+	private void generarReporteUsuarios() {
+		try {
+			txtReporte.setText(SistemaControl.getInstance().reporteTodosUsuarios());
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(
+				frame,
+				"Error al generar reporte de usuarios: " + e.getMessage(),
+				"Error",
+				JOptionPane.ERROR_MESSAGE
+			);
+		}
+	}
+
+	private void generarReporteItems() {
+		try {
+			txtReporte.setText(SistemaControl.getInstance().reporteTodosItems());
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(
+				frame,
+				"Error al generar reporte de ítems: " + e.getMessage(),
+				"Error",
+				JOptionPane.ERROR_MESSAGE
+			);
+		}
+	}
+
+	private void generarReporteCategorias() {
+		try {
+			txtReporte.setText(SistemaControl.getInstance().reporteTodasCategorias());
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(
+				frame,
+				"Error al generar reporte de categorías: " + e.getMessage(),
+				"Error",
+				JOptionPane.ERROR_MESSAGE
+			);
+		}
+	}
+
+	private void generarReporteTipos() {
+		try {
+			txtReporte.setText(SistemaControl.getInstance().reporteTodosTipos());
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(
+				frame,
+				"Error al generar reporte de tipos: " + e.getMessage(),
+				"Error",
+				JOptionPane.ERROR_MESSAGE
+			);
+		}
+	}
+	
 	private void buscarPersona() {
 		String texto = txtBuscarPersona.getText().toLowerCase();
 
@@ -569,7 +646,7 @@ public class Principal {
 	}
 	
 	private void buscarItem() {
-		String texto = txtBuscarItem.getText();
+		String texto = txtBuscarItem.getText().trim().toLowerCase();
 
 		javax.swing.table.DefaultTableModel model =
 			(javax.swing.table.DefaultTableModel) tablaItems.getModel();
@@ -579,15 +656,23 @@ public class Principal {
 		try {
 			for (logica.Item it : SistemaControl.getInstance().obtenerListadoItems()) {
 
-				if (it.getNombre().toLowerCase().contains(texto.toLowerCase())
-					|| it.getDescripcion().toLowerCase().contains(texto.toLowerCase())
-					|| it.getTipo().getNombre().toLowerCase().contains(texto.toLowerCase())
-					|| obtenerNombresCategorias(it).toLowerCase().contains(texto.toLowerCase())) {
+				String codigo = it.getCodigo() != null ? it.getCodigo().toLowerCase() : "";
+				String nombre = it.getNombre() != null ? it.getNombre().toLowerCase() : "";
+				String descripcion = it.getDescripcion() != null ? it.getDescripcion().toLowerCase() : "";
+				String tipo = it.getTipo() != null ? it.getTipo().getNombre().toLowerCase() : "";
+				String categorias = obtenerNombresCategorias(it).toLowerCase();
+
+				if (codigo.contains(texto)
+					|| nombre.contains(texto)
+					|| descripcion.contains(texto)
+					|| tipo.contains(texto)
+					|| categorias.contains(texto)) {
 
 					Object[] fila = new Object[] {
+						it.getCodigo(),
 						it.getNombre(),
 						it.getDescripcion(),
-						it.getTipo().getNombre(),
+						it.getTipo() != null ? it.getTipo().getNombre() : "",
 						obtenerNombresCategorias(it),
 						it.isPrestado() ? "Sí" : "No"
 					};
@@ -595,6 +680,7 @@ public class Principal {
 					model.addRow(fila);
 				}
 			}
+
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(
 				frame,
@@ -628,6 +714,7 @@ public class Principal {
 		try {
 			for (logica.Item it : control.obtenerListadoItems()) {
 				Object[] fila = new Object[] {
+					it.getCodigo(),
 					it.getNombre(),
 					it.getDescripcion(),
 					it.getTipo().getNombre(),
@@ -658,18 +745,19 @@ public class Principal {
 			return;
 		}
 
-		String nombre = (String) tablaItems.getValueAt(fila, 0);
+		String codigo = (String) tablaItems.getValueAt(fila, 0);
+		String nombre = (String) tablaItems.getValueAt(fila, 1);
 
 		int confirm = JOptionPane.showConfirmDialog(
 			frame,
-			"¿Eliminar el item " + nombre + "?",
+			"¿Eliminar el item \"" + nombre + "\" con código " + codigo + "?",
 			"Confirmar",
 			JOptionPane.YES_NO_OPTION
 		);
 
 		if (confirm == JOptionPane.YES_OPTION) {
 			try {
-				SistemaControl.getInstance().borrarItem(nombre);
+				SistemaControl.getInstance().borrarItem(codigo);
 				cargarItems();
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(

@@ -91,7 +91,10 @@ public class Prestamo implements Serializable {
 			if (sb.length() > 0) {
 				sb.append(", ");
 			}
-			sb.append(item.getNombre());
+
+			sb.append(item.getCodigo())
+			  .append(" - ")
+			  .append(item.getNombre());
 		}
 
 		return sb.toString();

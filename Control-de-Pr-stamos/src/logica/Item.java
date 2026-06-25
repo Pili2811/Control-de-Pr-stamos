@@ -6,26 +6,35 @@ import java.util.List;
 
 public class Item implements Serializable {
 	private String nombre;
+	private String codigo;
 	private String descripcion;
 	private Tipo tipo;
 	private List<Categoria> categorias;
 	private boolean prestado;
 	private Prestamo prestamo;
-	public Item(String nombre, String descripcion, Tipo tipo) {
-		this.nombre = nombre;
-		this.descripcion = descripcion;
-		this.tipo = tipo;
-		this.categorias = new ArrayList<Categoria>();
-		this.prestado = false;
-		this.prestamo = null;
-		if (tipo != null)
-			tipo.agregarItem(this);
+	public Item(String codigo, String nombre, String descripcion, Tipo tipo) {
+	    this.codigo = codigo;
+	    this.nombre = nombre;
+	    this.descripcion = descripcion;
+	    this.tipo = tipo;
+	    this.categorias = new ArrayList<Categoria>();
+	    this.prestado = false;
+	    this.prestamo = null;
+
+	    if (tipo != null)
+	        tipo.agregarItem(this);
 	}
 	public String getNombre() {
 		return nombre;
 	}
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+	public String getCodigo() {
+	    return codigo;
+	}
+	public void setCodigo(String codigo) {
+	    this.codigo = codigo;
 	}
 	public String getDescripcion() {
 		return descripcion;
@@ -76,6 +85,6 @@ public class Item implements Serializable {
 			tipo.quitarItem(this);
 	}
 	public String toString() {
-		return nombre;
+		return codigo + " - " + nombre;
 	}
 }
